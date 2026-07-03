@@ -1,0 +1,10 @@
+external_student_id,full_name,email,city
+101,Anna Smirnova,anna_final@example.com,Moscow
+102,Pavel Orlov,pavel_new@example.com,Nizhny Novgorod
+103,Elena Petrova,elena_updated@example.com,Rostov
+104,Ivan Sokolov,ivan@example.com,Tula
+105,Maria Volkova,maria@example.com,Sochi
+106,Sergey Ivanov,sergey@example.com,Ufa
+bad_id,Bad Student,bad@example.com,Kazan
+107,,empty_name@example.com,Omsk
+108,No Email Student,,Perm
