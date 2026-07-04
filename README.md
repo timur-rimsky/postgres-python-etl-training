@@ -1,30 +1,39 @@
 # PostgreSQL and Python ETL Training
 
-This repository contains a practical training project focused on PostgreSQL, SQL, and Python-based ETL workflows.
+Training project focused on junior-level Data Engineering and ETL development with Python, SQL and PostgreSQL.
 
-The project demonstrates how raw CSV data can be imported, validated, transformed, loaded into PostgreSQL, logged, and checked for data quality issues.
+The project demonstrates how raw CSV data can be read, validated, split into clean and rejected records, loaded into PostgreSQL, tracked with load logs and processed in a repeatable way without creating duplicate records.
 
 ## Main Focus
 
-The main goal of this project is to practice junior-level Data Engineering skills:
+The main goal of this project is to practice practical ETL and PostgreSQL skills:
 
-- PostgreSQL table design
-- SQL DDL and DML operations
-- constraints and relational integrity
-- CSV import into PostgreSQL
-- staging, clean, and rejected data flows
-- indexes and query plan analysis
-- Python connection to PostgreSQL
-- CSV validation with Python
-- UPSERT logic with `ON CONFLICT`
-- idempotent ETL loading
-- load logs and rejected rows tracking
-- transaction handling with `commit()` and `rollback()`
+* PostgreSQL table design
+* SQL DDL and DML operations
+* constraints and relational integrity
+* CSV data loading
+* Python connection to PostgreSQL
+* data validation with Python
+* clean/rejected data flow
+* UPSERT with `ON CONFLICT`
+* idempotent loading
+* load logs
+* rejected rows tracking
+* transaction handling with `commit()` and `rollback()`
+
+## Technologies Used
+
+* Python
+* PostgreSQL
+* SQL
+* psycopg2
+* python-dotenv
+* CSV files
 
 ## Project Structure
 
 ```text
-postgres_training/
+postgres-python-etl-training/
 │
 ├── data/
 │   ├── new_students.csv
@@ -66,70 +75,43 @@ postgres_training/
 └── README.md
 ```
 
-## Technologies Used
-
-- Python
-- PostgreSQL
-- SQL
-- psycopg2
-- python-dotenv
-- CSV files
-
 ## SQL Training Blocks
 
 The `sql/` folder contains PostgreSQL practice files.
 
-| File | Topic |
-|---|---|
-| `01_create_tables.sql` | Basic table creation |
-| `02_insert_data.sql` | Insert operations |
-| `03_queries.sql` | Basic queries |
-| `04_postgres_features.sql` | PostgreSQL-specific features |
-| `05_copy_import.sql` | CSV import with `COPY` / `\copy` |
-| `06_staging_import.sql` | Staging table import flow |
-| `07_relations.sql` | Relations and foreign keys |
-| `08_indexes_explain.sql` | Indexes and `EXPLAIN` |
-| `09_order_by_indexes.sql` | Indexes for sorting and `ORDER BY` |
-| `10_indexes_insert_cost.sql` | Insert cost of indexes |
-| `11_upsert_on_conflict.sql` | UPSERT with `ON CONFLICT` |
-
-### SQL topics covered
-
-- `CREATE TABLE`
-- `INSERT`, `UPDATE`, `DELETE`
-- `PRIMARY KEY`
-- `FOREIGN KEY`
-- `UNIQUE`
-- `CHECK`
-- `DEFAULT`
-- identity columns
-- staging tables
-- clean and rejected records
-- load logs
-- joins and relationships
-- indexes
-- `EXPLAIN` and `EXPLAIN ANALYZE`
-- UPSERT with `ON CONFLICT`
+| File                         | Topic                              |
+| ---------------------------- | ---------------------------------- |
+| `01_create_tables.sql`       | Basic table creation               |
+| `02_insert_data.sql`         | Insert operations                  |
+| `03_queries.sql`             | Basic SQL queries                  |
+| `04_postgres_features.sql`   | PostgreSQL-specific features       |
+| `05_copy_import.sql`         | CSV import with `COPY` / `\copy`   |
+| `06_staging_import.sql`      | Staging table import flow          |
+| `07_relations.sql`           | Relations and foreign keys         |
+| `08_indexes_explain.sql`     | Indexes and `EXPLAIN`              |
+| `09_order_by_indexes.sql`    | Indexes for sorting and `ORDER BY` |
+| `10_indexes_insert_cost.sql` | Insert cost of indexes             |
+| `11_upsert_on_conflict.sql`  | UPSERT with `ON CONFLICT`          |
 
 ## Python ETL Training Blocks
 
-The Python practice is located in:
+The Python scripts are located in:
 
 ```text
 08_python_postgres_etl/scripts/
 ```
 
-| File | Description |
-|---|---|
-| `01_db_connection.py` | Checks Python connection to PostgreSQL |
-| `02_create_insert_read.py` | Creates a table, inserts rows, and reads data back |
-| `03_transaction_rollback.py` | Demonstrates transaction rollback after a failed insert |
-| `04_env_connection.py` | Connects to PostgreSQL using environment variables |
-| `05_executemany_insert.py` | Inserts multiple rows using `executemany()` |
-| `06_csv_to_postgres.py` | Reads a clean CSV file and loads it into PostgreSQL |
-| `07_csv_validation.py` | Validates raw CSV data and separates clean/rejected rows |
-| `08_refactored_etl.py` | Refactored ETL script with functions, clean rows, rejected rows, and logs |
-| `09_csv_upsert_to_postgres.py` | CSV to PostgreSQL ETL with validation, UPSERT, load logs, rejected rows tracking, and foreign key integrity |
+| File                           | Description                                                                   |
+| ------------------------------ | ----------------------------------------------------------------------------- |
+| `01_db_connection.py`          | Checks Python connection to PostgreSQL                                        |
+| `02_create_insert_read.py`     | Creates a table, inserts rows and reads data back                             |
+| `03_transaction_rollback.py`   | Demonstrates transaction rollback                                             |
+| `04_env_connection.py`         | Connects to PostgreSQL using environment variables                            |
+| `05_executemany_insert.py`     | Inserts multiple rows using `executemany()`                                   |
+| `06_csv_to_postgres.py`        | Reads a clean CSV file and loads it into PostgreSQL                           |
+| `07_csv_validation.py`         | Validates raw CSV data and separates clean/rejected rows                      |
+| `08_refactored_etl.py`         | Refactored ETL script with functions, clean rows, rejected rows and logs      |
+| `09_csv_upsert_to_postgres.py` | Main ETL script with validation, UPSERT, load logs and rejected rows tracking |
 
 ## Main ETL Script
 
@@ -139,34 +121,21 @@ The main script is:
 08_python_postgres_etl/scripts/09_csv_upsert_to_postgres.py
 ```
 
-It implements a CSV to PostgreSQL ETL pipeline with:
-
-- CSV reading
-- row validation
-- clean/rejected split
-- UPSERT into a clean table
-- idempotent loading
-- ETL load logs
-- rejected rows tracking
-- foreign key relationship between rejected rows and load logs
-- transaction handling
-- basic type hints
-
-## ETL Flow
+It implements a CSV to PostgreSQL ETL process:
 
 ```text
 students_upsert.csv
         ↓
 Python CSV reader
         ↓
-validation
+row validation
         ↓
-valid rows                invalid rows
-        ↓                       ↓
-py_students_upsert         py_students_upsert_rejected
-        ↓                       ↓
-UPSERT logic               linked to load_log_id
-        ↓                       ↓
+valid rows                    invalid rows
+        ↓                           ↓
+py_students_upsert            py_students_upsert_rejected
+        ↓                           ↓
+UPSERT logic                  linked to load_log_id
+        ↓                           ↓
 py_students_upsert_load_logs
 ```
 
@@ -174,15 +143,15 @@ py_students_upsert_load_logs
 
 A row is considered valid if:
 
-- `external_student_id` can be converted to an integer
-- `full_name` is not empty
-- `email` is not empty
+* `external_student_id` can be converted to an integer
+* `full_name` is not empty
+* `email` is not empty
 
 Rejected rows are saved with a rejection reason:
 
-- `invalid external_student_id`
-- `empty full_name`
-- `empty email`
+* `invalid external_student_id`
+* `empty full_name`
+* `empty email`
 
 ## Database Tables Used by the Main ETL Script
 
@@ -190,66 +159,68 @@ Rejected rows are saved with a rejection reason:
 
 Stores clean student records.
 
-| Column | Type | Purpose |
-|---|---|---|
-| `student_id` | `BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY` | Internal student ID |
-| `external_student_id` | `INTEGER NOT NULL UNIQUE` | External business key from CSV |
-| `full_name` | `VARCHAR(100) NOT NULL` | Student name |
-| `email` | `VARCHAR(100) NOT NULL` | Student email |
-| `city` | `VARCHAR(50)` | Student city |
-| `updated_at` | `TIMESTAMP DEFAULT CURRENT_TIMESTAMP` | Last insert/update timestamp |
+Main fields:
 
-### `py_students_upsert_load_logs`
+* `student_id`
+* `external_student_id`
+* `full_name`
+* `email`
+* `city`
+* `updated_at`
 
-Stores one row per ETL load attempt.
-
-| Column | Type | Purpose |
-|---|---|---|
-| `log_id` | `BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY` | Load log ID |
-| `source_file` | `VARCHAR(255) NOT NULL` | Source CSV filename |
-| `total_rows` | `INTEGER NOT NULL` | Total rows read from CSV |
-| `valid_rows` | `INTEGER NOT NULL` | Rows that passed validation |
-| `rejected_rows` | `INTEGER NOT NULL` | Rows that failed validation |
-| `clean_affected_rows` | `INTEGER DEFAULT 0` | Clean rows inserted or updated |
-| `clean_unchanged_rows` | `INTEGER DEFAULT 0` | Clean rows already present without changes |
-| `loaded_at` | `TIMESTAMP DEFAULT CURRENT_TIMESTAMP` | Load timestamp |
+`external_student_id` is used as a business key for UPSERT logic.
 
 ### `py_students_upsert_rejected`
 
-Stores rejected source rows and links them to a specific ETL load.
+Stores rejected source rows.
 
-| Column | Type | Purpose |
-|---|---|---|
-| `rejected_id` | `BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY` | Rejected row ID |
-| `load_log_id` | `BIGINT` | Link to `py_students_upsert_load_logs.log_id` |
-| `external_student_id_raw` | `TEXT` | Raw external student ID from CSV |
-| `full_name_raw` | `TEXT` | Raw full name from CSV |
-| `email_raw` | `TEXT` | Raw email from CSV |
-| `city_raw` | `TEXT` | Raw city from CSV |
-| `rejection_reason` | `TEXT NOT NULL` | Reason why the row was rejected |
-| `rejected_at` | `TIMESTAMP DEFAULT CURRENT_TIMESTAMP` | Rejection timestamp |
+Main fields:
 
-## Foreign Key Integrity
+* `rejected_id`
+* `load_log_id`
+* `external_student_id_raw`
+* `full_name_raw`
+* `email_raw`
+* `city_raw`
+* `rejection_reason`
+* `rejected_at`
 
-The main ETL script adds a foreign key constraint:
+Rejected rows keep raw values and rejection reasons, so invalid source data is not lost silently.
 
-```text
-py_students_upsert_rejected.load_log_id
-        →
-py_students_upsert_load_logs.log_id
-```
+### `py_students_upsert_load_logs`
 
-This means:
+Stores one row per ETL load.
 
-- old rejected rows may have `NULL` in `load_log_id`
-- new rejected rows are linked to a real load log
-- if `load_log_id` is filled, PostgreSQL checks that the referenced `log_id` exists
+Main fields:
 
-This protects data integrity and makes rejected rows traceable to a specific ETL run.
+* `log_id`
+* `source_file`
+* `total_rows`
+* `valid_rows`
+* `rejected_rows`
+* `clean_affected_rows`
+* `clean_unchanged_rows`
+* `loaded_at`
+
+This table helps track how many rows were processed, loaded, rejected or left unchanged.
+
+## Key Engineering Decisions
+
+* `external_student_id` is used as a business key for UPSERT logic.
+* Clean and rejected rows are stored separately.
+* Rejected rows keep raw values and rejection reasons.
+* Each ETL run is tracked in a load log table.
+* `IS DISTINCT FROM` prevents unnecessary updates when incoming data has not changed.
+* The load runs inside one transaction to avoid partial writes.
+* Rejected rows are linked to load logs with a foreign key.
 
 ## UPSERT and Idempotency
 
-The script uses `ON CONFLICT (external_student_id) DO UPDATE`.
+The script uses:
+
+```sql
+ON CONFLICT (external_student_id) DO UPDATE
+```
 
 Rows are updated only when data really changed:
 
@@ -262,14 +233,26 @@ WHERE
 
 This makes the load idempotent:
 
-- first run inserts clean rows
-- repeated run with the same CSV does not update unchanged rows
-- if one clean row changes, only that row is updated
+* first run inserts clean rows;
+* repeated run with the same CSV does not create duplicates;
+* unchanged rows are not updated again;
+* changed rows are updated only when needed.
 
 The script tracks this using:
 
-- `clean_affected_rows`
-- `clean_unchanged_rows`
+* `clean_affected_rows`
+* `clean_unchanged_rows`
+
+## How to Check Idempotency
+
+1. Run the main ETL script once.
+2. Run the same script again with the same CSV file.
+3. Check the latest load log.
+4. The second run should have:
+
+   * no duplicate rows in `py_students_upsert`;
+   * `clean_affected_rows = 0`;
+   * `clean_unchanged_rows = valid_rows`.
 
 ## Example Output
 
@@ -280,45 +263,20 @@ Load completed.
 Total rows: 9
 Valid rows: 6
 Rejected rows: 3
-
-Last load logs:
-(6, 'students_upsert.csv', 9, 6, 3, 0, 6, datetime.datetime(...))
 ```
 
-This means:
-
-- 9 rows were read from the CSV file
-- 6 rows passed validation
-- 3 rows were rejected
-- 0 clean rows were inserted or updated during this run
-- 6 clean rows were already present and unchanged
-
-## Example Rejected Rows Check
-
-Rejected rows can be checked by load ID:
-
-```sql
-SELECT
-    rejected_id,
-    load_log_id,
-    external_student_id_raw,
-    full_name_raw,
-    email_raw,
-    city_raw,
-    rejection_reason,
-    rejected_at
-FROM py_students_upsert_rejected
-WHERE load_log_id = 6
-ORDER BY rejected_id;
-```
-
-Example result:
+Example load log:
 
 ```text
-bad_id  → invalid external_student_id
-107     → empty full_name
-108     → empty email
+source_file: students_upsert.csv
+total_rows: 9
+valid_rows: 6
+rejected_rows: 3
+clean_affected_rows: 0
+clean_unchanged_rows: 6
 ```
+
+This means that the file was processed successfully, invalid rows were saved separately, and clean rows were already present without changes.
 
 ## Environment Variables
 
@@ -326,7 +284,7 @@ Database credentials are stored in `.env`.
 
 The real `.env` file must not be committed to GitHub. Use `.env.example` as a template:
 
-```text
+```env
 DB_NAME=online_school_etl
 DB_USER=postgres
 DB_PASSWORD=your_password_here
@@ -344,17 +302,10 @@ pip install -r requirements.txt
 
 ## How to Run
 
-From the project root, run the main ETL script:
+From the project root, run:
 
 ```bash
 python 08_python_postgres_etl/scripts/09_csv_upsert_to_postgres.py
-```
-
-To run earlier learning scripts, use the same pattern:
-
-```bash
-python 08_python_postgres_etl/scripts/01_db_connection.py
-python 08_python_postgres_etl/scripts/08_refactored_etl.py
 ```
 
 ## Requirements
@@ -366,25 +317,25 @@ python-dotenv
 
 ## What This Project Demonstrates
 
-This project demonstrates practical junior-level skills for Data Engineering and ETL work:
+This project demonstrates practical junior-level skills for ETL and Data Engineering work:
 
-- designing PostgreSQL tables
-- writing SQL DDL and DML
-- using constraints and foreign keys
-- importing CSV files
-- validating data with Python
-- separating clean and rejected rows
-- writing ETL load logs
-- using UPSERT for repeatable data loads
-- checking idempotency with affected/unchanged row counts
-- tracking rejected rows by load ID
-- using environment variables for database credentials
-- organizing Python ETL code into small functions
-- using basic type hints
+* designing PostgreSQL tables;
+* writing SQL DDL and DML;
+* using constraints and foreign keys;
+* importing CSV files;
+* validating data with Python;
+* separating clean and rejected rows;
+* writing ETL load logs;
+* using UPSERT for repeatable data loads;
+* checking idempotency with affected/unchanged row counts;
+* tracking rejected rows by load ID;
+* using environment variables for database credentials;
+* organizing Python ETL code into small functions;
+* handling transactions with `commit()` and `rollback()`.
 
 ## Current Status
 
-The project is a training repository focused on PostgreSQL and Python ETL fundamentals.
+This is a training project focused on PostgreSQL and Python ETL fundamentals.
 
 The most complete script is:
 
